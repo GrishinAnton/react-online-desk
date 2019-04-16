@@ -1,8 +1,8 @@
 //Core
 import React, { Component } from 'react';
-import moment from 'moment';
 
 // Components
+import Catcher from '../../components/Catcher';
 import StatusBar from '../StatusBar';
 import Composer from '../Composer';
 import Post from '../Post';
@@ -11,7 +11,7 @@ import { withProfile } from '../HOC/withProfile';
 
 // Instruments
 import Styles from './styles.m.css';
-import { getUniqueID, delay } from '../../instruments';
+import { api, TOKEN } from '../../config/api';
 
 @withProfile
 export default class Feed extends Component {
@@ -23,22 +23,51 @@ export default class Feed extends Component {
         isPostFetching: false,
     }
 
+    componentDidMount () {
+        this._fetchPosts();
+
+        this.refetch = setInterval(this._fetchPosts, 1000);
+    }
+
+    componentWillUnmount () {
+        clearInterval(this.refetch);
+    }
+
     _setPostFetchingState = (state) => {
         this.setState({
             isPostFetching: state,
         });
     }
 
+    _fetchPosts = async () => {
+        this._setPostFetchingState(true);
+
+        const response = await fetch(api, {
+            method: 'GET',
+        });
+
+        const { data: posts } = await response.json();
+
+        this.setState({
+            posts,
+            isPostFetching: false,
+        });
+    }
+
     _createPost = async (comment) => {
         this._setPostFetchingState(true);
-        const post = {
-            id:      getUniqueID(),
-            created: moment.now(),
-            comment,
-            likes:   [],
-        };
 
-        await delay(2000);
+        const response = await fetch(api, {
+            method:  'POST',
+            headers: {
+                'Content-type': 'application/json',
+                Authorization:  TOKEN,
+            },
+            body: JSON.stringify({comment}),
+        });
+
+        const { data: post } = await response.json();
+
 
         this.setState(({ posts }) => ({
             posts:          [ post, ...posts ],
@@ -47,44 +76,38 @@ export default class Feed extends Component {
     }
 
     _likePost = async (id) => {
-        const { currentUserFirstName, currentUserLastName } = this.props;
-
         this._setPostFetchingState(true);
 
-        await delay(2000);
-
-        const newPost = this.state.posts.map((post) => {
-            if (id === post.id) {
-                return {
-                    ...post,
-                    likes: [
-                        {
-                            id:        getUniqueID(),
-                            firstName: currentUserFirstName,
-                            lastName:  currentUserLastName,
-                        },
-                    ],
-                };
-            }
-
-            return post;
+        const response = await fetch(`${api}/${id}`, {
+            method:  'PUT',
+            headers: {
+                Authorization: TOKEN,
+            },
         });
 
-        this.setState({
-            posts:          newPost,
+        const { data: likePost } = await response.json();
+
+        this.setState(({ posts }) => ({
+            posts:          posts.map((post) => post.id === likePost.id ? likePost : post),
             isPostFetching: false,
-        });
+        }));
     }
 
-    _removePost = (id) => {
-        const posts = this.state.posts.filter((post) => {
-            return id !== post.id;
+    _removePost = async (id) => {
+        this._setPostFetchingState(true);
+
+        await fetch(`${api}/${id}`, {
+            method:  'DELETE',
+            headers: {
+                Authorization: TOKEN,
+            },
         });
 
 
-        this.setState({
-            posts: posts,
-        });
+        this.setState(({ posts }) => ({
+            posts:          posts.filter((post) => post.id !== id),
+            isPostFetching: false,
+        }));
     }
 
     render () {
@@ -92,12 +115,14 @@ export default class Feed extends Component {
 
         const postsJSX = posts.map((post) => {
             return (
-                <Post
-                    key = { post.id }
-                    { ...post }
-                    _likePost = { this._likePost }
-                    _removePost = { this._removePost }
-                />
+                <Catcher key = { post.id }>
+                    <Post
+                        key = { post.id }
+                        { ...post }
+                        _likePost = { this._likePost }
+                        _removePost = { this._removePost }
+                    />
+                </Catcher>
             );
         });
 

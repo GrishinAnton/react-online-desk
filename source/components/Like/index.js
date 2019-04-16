@@ -23,6 +23,11 @@ export default class Like extends Component {
         ).isRequired,
     }
 
+    // componentDidMount() {
+    //     console.log(this.props.likes);
+    // }
+
+
     state = {
         showLikers: false,
     }
@@ -67,9 +72,14 @@ export default class Like extends Component {
         const { showLikers } = this.state;
         const { likes } = this.props;
 
+        // console.log(likes);
+
         const likesJSX = likes.map(({firstName, lastName, id}) => {
             return <li key = { id }>{`${firstName} ${lastName}`}</li>;
         });
+
+        // console.log(likes.length);
+        // console.log(showLikers);
 
         return likes.length && showLikers ? <ul>{ likesJSX }</ul> : null;
     }
@@ -93,6 +103,8 @@ export default class Like extends Component {
         const likersList = this._getLikersList();
         const likesDescription = this._getLikesDescription();
 
+        const { likes } = this.props;
+
         return (
             <section className = { Styles.like }>
                 <span
@@ -101,11 +113,11 @@ export default class Like extends Component {
                 </span>
 
                 <div>
-                    { likersList }
+                    {likersList} { likes.length }
                     <span
                         onMouseEnter = { this._showLikers }
                         onMouseLeave = { this._hideLikers }>
-                        { likesDescription }
+                        &nbsp;{ likesDescription }
                     </span>
                 </div>
             </section>
