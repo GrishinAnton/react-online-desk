@@ -7,6 +7,7 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 import Catcher from '../../components/Catcher';
 import Feed from '../../components/Feed';
 import Profile from '../../components/Profile';
+import Login from '../../components/Login';
 import { Provider } from '../../components/HOC/withProfile';
 import StatusBar from '../../components/StatusBar';
 
@@ -28,6 +29,10 @@ export default class App extends Component {
                     <StatusBar />
                     <Switch>
                         <Route
+                            component = { Login }
+                            path = '/login'
+                        />
+                        <Route
                             component = { Feed }
                             path = '/feed'
                         />
@@ -35,7 +40,7 @@ export default class App extends Component {
                             component = { Profile }
                             path = '/profile'
                         />
-                        <Redirect to = '/feed' />
+                        <Redirect to = '/login' />
                     </Switch>
                 </Provider>
             </Catcher>
