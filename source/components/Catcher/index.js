@@ -8,19 +8,19 @@ import Styles from './styles.m.css';
 export default class Catcher extends Component {
     static propTypes = {
         children: object.isRequired,
-    }
+    };
 
     state = {
         error: false,
-    }
+    };
 
-    componentDidCatch () {
+    componentDidCatch() {
         this.setState({
             error: true,
         });
     }
 
-    render () {
+    render() {
         if (this.state.error) {
             return (
                 <section className = { Styles.catcher }>

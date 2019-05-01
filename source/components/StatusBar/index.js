@@ -15,9 +15,9 @@ import { socket } from '../../socket/init';
 export default class StatusBar extends Component {
     state = {
         online: false,
-    }
+    };
 
-    componentDidMount () {
+    componentDidMount() {
         socket.on('connect', () => {
             this.setState({
                 online: true,
@@ -30,16 +30,16 @@ export default class StatusBar extends Component {
         });
     }
 
-    componentWillUnmount () {
+    componentWillUnmount() {
         socket.removeListener('connect');
         socket.removeListener('disconnect');
     }
 
     _animateStatusBarEnter = (statusBar) => {
         fromTo(statusBar, 1, { opacity: 0 }, { opacity: 1 });
-    }
+    };
 
-    render () {
+    render() {
         const { avatar, currentUserFirstName, currentUserLastName } = this.props;
         const { online } = this.state;
 
@@ -69,7 +69,6 @@ export default class StatusBar extends Component {
                     </button>
                 </section>
             </Transition>
-
         );
     }
 }

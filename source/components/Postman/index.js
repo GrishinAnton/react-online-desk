@@ -8,21 +8,11 @@ import Styles from './styles.m.css';
 import { withProfile } from '../HOC/withProfile';
 
 const Postman = (props) => {
-    const  _animatePostmanEnter = (postman) => {
-        fromTo(
-            postman,
-            1,
-            { opacity: 0 },
-            { opacity: 1 },
-        );
+    const _animatePostmanEnter = (postman) => {
+        fromTo(postman, 1, { opacity: 0 }, { opacity: 1 });
     };
     const _animatePostmanEntered = (postman) => {
-        fromTo(
-            postman,
-            1,
-            { opacity: 1 },
-            { opacity: 0 },
-        );
+        fromTo(postman, 1, { opacity: 1 }, { opacity: 0 });
     };
 
     return (
@@ -37,7 +27,6 @@ const Postman = (props) => {
                 <span>Welcome online, {props.currentUserFirstName}</span>
             </section>
         </Transition>
-
     );
 };
 

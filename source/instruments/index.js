@@ -20,8 +20,7 @@ export const getUniqueID = (length = 15) => {
     }
 
     let text = '';
-    const possible
-        = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
     for (let i = 0; i < length; i++) {
         text += possible.charAt(Math.floor(Math.random() * possible.length));
@@ -32,9 +31,7 @@ export const getUniqueID = (length = 15) => {
 
 export const getFullApiUrl = (api, GROUP_ID) => {
     if (typeof api !== 'string' || typeof GROUP_ID !== 'string') {
-        throw new Error(
-            '\'api\' and \'GROUP_ID\' arguments passed should be a string!',
-        );
+        throw new Error('\'api\' and \'GROUP_ID\' arguments passed should be a string!');
     }
 
     return `${api}/${GROUP_ID}`;
