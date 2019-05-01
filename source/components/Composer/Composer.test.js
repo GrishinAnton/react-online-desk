@@ -1,8 +1,7 @@
 //Core
 import React from 'react';
-import { mount  } from 'enzyme';
+import { mount } from 'enzyme';
 import Composer from './';
-
 
 const props = {
     _createPost: jest.fn(),
@@ -21,7 +20,7 @@ const updateState = {
 const result = mount(<Composer { ...props } />);
 
 const _submitCommentSpy = jest.spyOn(result.instance(), '_submitComment');
-const _handleFormSubmitSpy = jest.spyOn(result.instance(), '_handleFormSubmitSpy');
+const _handleFormSubmitSpy = jest.spyOn(result.instance(), '_handleFormSubmit');
 
 describe('composer component:', () => {
     test('should have 1 "section" element', () => {

@@ -5,7 +5,6 @@ import { fromTo } from 'gsap';
 
 // Components
 import Catcher from '../../components/Catcher';
-import StatusBar from '../StatusBar';
 import Composer from '../Composer';
 import Post from '../Post';
 import Spinner from '../Spinner';
@@ -185,7 +184,6 @@ export default class Feed extends Component {
         return (
             <section className = { Styles.feed }>
                 <Spinner isSpinning = { isPostFetching } />
-                <StatusBar />
                 <Transition
                     appear
                     in
