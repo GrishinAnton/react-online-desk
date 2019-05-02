@@ -1,7 +1,7 @@
 //Core
 import React from 'react';
 import { mount } from 'enzyme';
-import Composer from './';
+import { Composer } from './';
 
 const props = {
     _createPost: jest.fn(),
@@ -53,7 +53,7 @@ describe('composer component:', () => {
         });
 
         expect(result.state()).toEqual(updateState);
-        // expect(result.find('textarea').text()).toBe(comment);
+        expect(result.find('textarea').text()).toBe(comment);
 
         result.setState({
             comment: '',
@@ -65,12 +65,12 @@ describe('composer component:', () => {
 
     test('should handle textarea "change" event', () => {
         result.find('textarea').simulate('change', {
-            terget: {
+            target: {
                 value: comment,
             },
         });
 
-        // expect(result.find('textarea').text()).toBe(comment);
+        expect(result.find('textarea').text()).toBe(comment);
     });
 
     test('should handle textarea "submit" event', () => {

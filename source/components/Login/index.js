@@ -15,9 +15,14 @@ import Styles from './styles.m.css';
 
 export default class Login extends Component {
     render() {
+        const { loginSuccess } = this.props;
+
         return (
             <div className = { Styles.login }>
-                <Link to = '/feed'>Войти</Link>
+                <Link
+                    to = '/feed'
+                    onClick = { () => loginSuccess(true) }>Войти
+                </Link>
             </div>
         );
     }
