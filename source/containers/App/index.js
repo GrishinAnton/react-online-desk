@@ -23,72 +23,49 @@ const options = {
 @hot(module)
 export default class App extends Component {
     state = {
-        enterSuccess: false,
+        isAuthenticated: JSON.parse(localStorage.getItem('isAuthenticated')),
     }
 
-    componentDidMount() {
-        const enterSeccess = JSON.parse(localStorage.getItem('enterSuccess'));
-        if (enterSeccess) {
-            this.setState({
-                enterSuccess: enterSeccess,
-            });
-        }
-    }
 
     _loginToggle = (state) => {
         this.setState({
-            enterSuccess: state,
+            isAuthenticated: state,
         });
 
-        localStorage.setItem('enterSuccess', state);
+        localStorage.setItem('isAuthenticated', state);
     }
 
 
     render() {
-        const { enterSuccess } = this.state;
-        const LoginWrapper = ({component: Component, ...rest}) => (
-
-            <Route
-                { ...rest }
-                render = { (props) =>(
-                    <Component
-                        loginSuccess = { this._loginToggle }
-                        props = { props }
-                    />
-                ) }
-            />
-        );
-
+        const { isAuthenticated } = this.state;
 
         return (
             <Catcher>
                 <Provider value = { options }>
                     <StatusBar loginFail = { this._loginToggle } />
                     <Switch>
-                        <LoginWrapper
-                            component = { Login }
+                        <Route
                             path = '/login'
+                            render = { (props) => (
+                                <Login
+                                    loginSuccess = { this._loginToggle }
+                                    { ...props }
+                                />
+                            ) }
                         />
 
-                        {/* <Route
-                            component = { Login }
-                            func = { enterSuccess }
-                            path = '/login'
-                        /> */}
-                        {
-                            enterSuccess && <Route
-                                component = { Feed }
-                                path = '/feed'
-                                            />
-                        }
-                        {
-                            enterSuccess && <Route
-                                component = { Profile }
-                                path = '/profile'
-                            />
-                        }
+                        {!isAuthenticated && <Redirect to = '/login' />}
 
-                        <Redirect to = '/login' />
+                        <Route
+                            component = { Feed }
+                            path = '/feed'
+                        />
+                        <Route
+                            component = { Profile }
+                            path = '/profile'
+                        />
+
+                        <Redirect to = '/feed' />
                     </Switch>
                 </Provider>
             </Catcher>

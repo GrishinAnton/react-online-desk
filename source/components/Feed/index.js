@@ -85,70 +85,86 @@ export default class Feed extends Component {
     _fetchPosts = async () => {
         this._setPostFetchingState(true);
 
-        const response = await fetch(api, {
-            method: 'GET',
-        });
+        try {
+            const response = await fetch(api, {
+                method: 'GET',
+            });
 
-        const { data: posts } = await response.json();
+            const { data: posts } = await response.json();
 
-        this.setState({
-            posts,
-            isPostFetching: false,
-        });
+            this.setState({
+                posts,
+                isPostFetching: false,
+            });
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     _createPost = async (comment) => {
         this._setPostFetchingState(true);
 
-        const response = await fetch(api, {
-            method:  'POST',
-            headers: {
-                'Content-type': 'application/json',
-                Authorization:  TOKEN,
-            },
-            body: JSON.stringify({ comment }),
-        });
+        try {
+            const response = await fetch(api, {
+                method:  'POST',
+                headers: {
+                    'Content-type': 'application/json',
+                    Authorization:  TOKEN,
+                },
+                body: JSON.stringify({ comment }),
+            });
 
-        const { data: post } = await response.json();
+            const { data: post } = await response.json();
 
-        this.setState(({ posts }) => ({
-            posts:          [ post, ...posts ],
-            isPostFetching: false,
-        }));
+            this.setState(({ posts }) => ({
+                posts:          [ post, ...posts ],
+                isPostFetching: false,
+            }));
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     _likePost = async (id) => {
         this._setPostFetchingState(true);
 
-        const response = await fetch(`${api}/${id}`, {
-            method:  'PUT',
-            headers: {
-                Authorization: TOKEN,
-            },
-        });
+        try {
+            const response = await fetch(`${api}/${id}`, {
+                method:  'PUT',
+                headers: {
+                    Authorization: TOKEN,
+                },
+            });
 
-        const { data: likePost } = await response.json();
+            const { data: likePost } = await response.json();
 
-        this.setState(({ posts }) => ({
-            posts:          posts.map((post) => post.id === likePost.id ? likePost : post),
-            isPostFetching: false,
-        }));
+            this.setState(({ posts }) => ({
+                posts:          posts.map((post) => post.id === likePost.id ? likePost : post),
+                isPostFetching: false,
+            }));
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     _removePost = async (id) => {
         this._setPostFetchingState(true);
 
-        await fetch(`${api}/${id}`, {
-            method:  'DELETE',
-            headers: {
-                Authorization: TOKEN,
-            },
-        });
+        try {
+            await fetch(`${api}/${id}`, {
+                method:  'DELETE',
+                headers: {
+                    Authorization: TOKEN,
+                },
+            });
 
-        this.setState(({ posts }) => ({
-            posts:          posts.filter((post) => post.id !== id),
-            isPostFetching: false,
-        }));
+            this.setState(({ posts }) => ({
+                posts:          posts.filter((post) => post.id !== id),
+                isPostFetching: false,
+            }));
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     _animateComoposerEnter = (composer) => {
@@ -192,6 +208,7 @@ export default class Feed extends Component {
                     <Composer _createPost = { this._createPost } />
                 </Transition>
                 <Postman />
+                {console.log(postsJSX)}
                 <TransitionGroup>{postsJSX}</TransitionGroup>
             </section>
         );
