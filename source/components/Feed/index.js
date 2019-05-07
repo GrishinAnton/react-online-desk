@@ -208,7 +208,6 @@ export default class Feed extends Component {
                     <Composer _createPost = { this._createPost } />
                 </Transition>
                 <Postman />
-                {console.log(postsJSX)}
                 <TransitionGroup>{postsJSX}</TransitionGroup>
             </section>
         );
